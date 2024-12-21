@@ -204,9 +204,12 @@
                     document.getElementById('errorMessage').classList.add('hidden');
                     e.target.reset();
                 } else {
+                    const errorData = await response.json();
+                    console.error('Error:', errorData);
                     throw new Error('Network response was not ok');
                 }
             } catch (error) {
+                console.error('Error:', error);
                 document.getElementById('errorMessage').classList.remove('hidden');
                 document.getElementById('successMessage').classList.add('hidden');
             }
