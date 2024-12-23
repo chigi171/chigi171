@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
-import { Menu, X, Send, Phone, Mail, Building } from 'lucide-react';
+import { Menu, X, Send } from 'lucide-react';
+
+// Import images
+import privacyPossibleLogo from './assets/images/privacy_possible_logo.png';
+import enemsolLogo from './assets/images/enemsol_logo.jpeg';
 
 const Navigation = ({ isOpen, setIsOpen }) => (
   <nav className="bg-white shadow-lg fixed w-full z-50">
@@ -60,7 +64,7 @@ const Portfolio = () => (
       <div className="grid md:grid-cols-2 gap-8">
         <div className="bg-white p-6 rounded-lg shadow-md">
           <img 
-            src="/api/placeholder/400/200" 
+            src={privacyPossibleLogo}
             alt="PrivacyPossible.org Logo" 
             className="w-full h-40 object-contain mb-4"
           />
@@ -80,7 +84,7 @@ const Portfolio = () => (
         
         <div className="bg-white p-6 rounded-lg shadow-md">
           <img 
-            src="/api/placeholder/400/200" 
+            src={enemsolLogo}
             alt="EnEmSol.com Logo" 
             className="w-full h-40 object-contain mb-4"
           />
@@ -111,10 +115,35 @@ const ContactForm = () => {
   });
   const [status, setStatus] = useState('');
 
+  const callEndpoint = async (company, message, name, email) => {
+    const url = 'https://fvm9by.buildship.run/chigi-e644709bc6cf';
+    const data = {
+      company: company,
+      message: message,
+      name: name,
+      email: email
+    };
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+      });
+      const result = await response.json();
+      console.log('Success:', result);
+      return result;
+    } catch (error) {
+      console.error('Error:', error);
+      throw error;
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const result = await callEndpoint(
+      await callEndpoint(
         formData.company,
         formData.message,
         formData.name,
@@ -129,8 +158,8 @@ const ContactForm = () => {
 
   return (
     <section id="contact" className="py-12 bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-3xl font-bold text-center mb-12">Contact Us</h2>
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 className="text-3xl font-bold text-center mb-8">Contact Us</h2>
         
         {status && (
           <div className={`mb-6 p-4 rounded ${status.includes('Failed') ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'}`}>
@@ -138,79 +167,59 @@ const ContactForm = () => {
           </div>
         )}
         
-        <div className="grid md:grid-cols-2 gap-8">
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <h3 className="text-xl font-semibold mb-4">Get in Touch</h3>
-            <div className="space-y-4">
-              <div className="flex items-center space-x-3">
-                <Mail className="text-gray-600" />
-                <span>info@chigitechnology.com</span>
-              </div>
-              <div className="flex items-center space-x-3">
-                <Phone className="text-gray-600" />
-                <span>+1 (555) 123-4567</span>
-              </div>
-              <div className="flex items-center space-x-3">
-                <Building className="text-gray-600" />
-                <span>123 Tech Street, Innovation City</span>
-              </div>
-            </div>
+            <label className="block text-sm font-medium text-gray-700">Name</label>
+            <input
+              type="text"
+              required
+              value={formData.name}
+              onChange={(e) => setFormData({...formData, name: e.target.value})}
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2"
+            />
           </div>
           
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Name</label>
-              <input
-                type="text"
-                required
-                value={formData.name}
-                onChange={(e) => setFormData({...formData, name: e.target.value})}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-              />
-            </div>
-            
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Email</label>
-              <input
-                type="email"
-                required
-                value={formData.email}
-                onChange={(e) => setFormData({...formData, email: e.target.value})}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-              />
-            </div>
-            
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Company</label>
-              <input
-                type="text"
-                required
-                value={formData.company}
-                onChange={(e) => setFormData({...formData, company: e.target.value})}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-              />
-            </div>
-            
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Message</label>
-              <textarea
-                required
-                value={formData.message}
-                onChange={(e) => setFormData({...formData, message: e.target.value})}
-                rows={4}
-                className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
-              />
-            </div>
-            
-            <button
-              type="submit"
-              className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-            >
-              <Send className="h-4 w-4 mr-2" />
-              Send Message
-            </button>
-          </form>
-        </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">Email</label>
+            <input
+              type="email"
+              required
+              value={formData.email}
+              onChange={(e) => setFormData({...formData, email: e.target.value})}
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2"
+            />
+          </div>
+          
+          <div>
+            <label className="block text-sm font-medium text-gray-700">Company</label>
+            <input
+              type="text"
+              required
+              value={formData.company}
+              onChange={(e) => setFormData({...formData, company: e.target.value})}
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2"
+            />
+          </div>
+          
+          <div>
+            <label className="block text-sm font-medium text-gray-700">Message</label>
+            <textarea
+              required
+              value={formData.message}
+              onChange={(e) => setFormData({...formData, message: e.target.value})}
+              rows={4}
+              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 p-2"
+            />
+          </div>
+          
+          <button
+            type="submit"
+            className="w-full inline-flex justify-center items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+          >
+            <Send className="h-4 w-4 mr-2" />
+            Send Message
+          </button>
+        </form>
       </div>
     </section>
   );
