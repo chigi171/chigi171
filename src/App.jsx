@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { AlertCircle, Menu, X, Send, Phone, Mail, Building } from 'lucide-react';
-import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Menu, X, Send, Phone, Mail, Building } from 'lucide-react';
 
 const Navigation = ({ isOpen, setIsOpen }) => (
   <nav className="bg-white shadow-lg fixed w-full z-50">
@@ -110,7 +109,7 @@ const ContactForm = () => {
     company: '',
     message: ''
   });
-  const [status, setStatus] = useState({ type: '', message: '' });
+  const [status, setStatus] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -121,10 +120,10 @@ const ContactForm = () => {
         formData.name,
         formData.email
       );
-      setStatus({ type: 'success', message: 'Message sent successfully!' });
+      setStatus('Message sent successfully!');
       setFormData({ name: '', email: '', company: '', message: '' });
     } catch (error) {
-      setStatus({ type: 'error', message: 'Failed to send message. Please try again.' });
+      setStatus('Failed to send message. Please try again.');
     }
   };
 
@@ -133,11 +132,10 @@ const ContactForm = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <h2 className="text-3xl font-bold text-center mb-12">Contact Us</h2>
         
-        {status.message && (
-          <Alert className="mb-6" variant={status.type === 'error' ? 'destructive' : 'default'}>
-            <AlertCircle className="h-4 w-4" />
-            <AlertDescription>{status.message}</AlertDescription>
-          </Alert>
+        {status && (
+          <div className={`mb-6 p-4 rounded ${status.includes('Failed') ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'}`}>
+            {status}
+          </div>
         )}
         
         <div className="grid md:grid-cols-2 gap-8">
