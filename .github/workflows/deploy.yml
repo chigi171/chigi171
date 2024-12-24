@@ -10,7 +10,6 @@ permissions:
   pages: write
   id-token: write
 
-# Allow only one concurrent deployment
 concurrency:
   group: "pages"
   cancel-in-progress: false
@@ -29,10 +28,14 @@ jobs:
           cache: 'npm'
           
       - name: Install dependencies
-        run: npm install
+        run: |
+          npm ci
+          npm list
         
-      - name: Build
-        run: npm run build
+      - name: Build with debug
+        run: |
+          npm run build
+          ls -la dist/
         
       - name: Setup Pages
         uses: actions/configure-pages@v4
