@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { HashRouter as Router, Routes, Route } from 'react-router-dom';  // Changed to HashRouter
 import Navigation from './components/Navigation';
 import Hero from './components/Hero';
 import Portfolio from './components/Portfolio';
@@ -8,35 +9,31 @@ import TermsOfService from './pages/TermsOfService';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import CookiesPolicy from './pages/CookiesPolicy';
 
+// Create a Home component to hold the main page content
+const Home = () => (
+  <>
+    <Hero />
+    <Portfolio />
+    <ContactForm />
+  </>
+);
+
 const App = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   
-  const getPage = () => {
-    const path = window.location.pathname;
-    switch (path) {
-      case '/terms':
-        return <TermsOfService />;
-      case '/privacy':
-        return <PrivacyPolicy />;
-      case '/cookies':
-        return <CookiesPolicy />;
-      default:
-        return (
-          <>
-            <Hero />
-            <Portfolio />
-            <ContactForm />
-          </>
-        );
-    }
-  };
-  
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Navigation isOpen={isMenuOpen} setIsOpen={setIsMenuOpen} />
-      {getPage()}
-      <Footer />
-    </div>
+    <Router>
+      <div className="min-h-screen bg-gray-50">
+        <Navigation isOpen={isMenuOpen} setIsOpen={setIsMenuOpen} />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/terms" element={<TermsOfService />} />
+          <Route path="/privacy" element={<PrivacyPolicy />} />
+          <Route path="/cookies" element={<CookiesPolicy />} />
+        </Routes>
+        <Footer />
+      </div>
+    </Router>
   );
 };
 
