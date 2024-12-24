@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const Footer = () => (
   <footer className="bg-gray-800 text-white py-8">
@@ -8,9 +9,9 @@ const Footer = () => (
           © {new Date().getFullYear()} Chigi Technology Limited. All rights reserved.
         </div>
         <div className="flex flex-wrap gap-4 text-sm text-gray-300">
-          <a href="/terms" className="hover:text-white">Terms of Service</a>
-          <a href="/privacy" className="hover:text-white">Privacy Policy</a>
-          <a href="/cookies" className="hover:text-white">Cookies</a>
+          <Link to="/terms" className="hover:text-white">Terms of Service</Link>
+          <Link to="/privacy" className="hover:text-white">Privacy Policy</Link>
+          <Link to="/cookies" className="hover:text-white">Cookies</Link>
         </div>
       </div>
     </div>
